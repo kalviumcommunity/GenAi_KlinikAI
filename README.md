@@ -1,7 +1,7 @@
 KlinikAI is an advanced, AI-powered platform designed to revolutionize how healthcare professionals access and interpret patient medical histories. It transforms scattered, unstructured medical records into a centralized, intelligent knowledge base, allowing for rapid, conversational access to a patient's complete clinical past.
 🌟 Overview
 In a fast-paced clinical environment, sifting through numerous files—lab results, consultation notes, and discharge summaries—is time-consuming and risks overlooking critical information. KlinikAI addresses this challenge by providing a smart assistant that can synthesize information from all patient records and answer complex questions in plain language.
-This project uses a Retrieval-Augmented Generation (RAG) architecture to provide accurate, context-aware answers, ensuring that all generated information is grounded in the source documents.
+This project uses a Retrieval-Augmented Generation (RAG) architecture to provide accurate, context-aware answers, ensuring that all generated information is grounded in the source documents
 ✨ Key Features
 Unified Patient History: Consolidates various document formats (PDF, TXT, DOCX) into a single, queryable knowledge base.
 Natural Language Querying: Ask specific questions like "Summarize all cardiac-related events" or "List all medications prescribed in the last year" and get direct answers.
