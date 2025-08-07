@@ -19,9 +19,29 @@ Improved Clinical Decision-Making: Provides a holistic patient view to help iden
 
 
 
-⚙️ How It Works: The RAG Architecture
+How It Works: The RAG Architecture
 KlinikAI operates on a robust Retrieval-Augmented Generation pipeline:
 Indexing: All patient medical records are loaded, split into manageable chunks, and converted into numerical representations (vector embeddings). These are stored in a specialized vector database.
 Retrieval: When a user asks a question, the query is also converted into a vector. The system then performs a similarity search in the vector database to find the most relevant chunks of text from the source documents.
 Generation: The user's original query and the retrieved text chunks are passed to a Large Language Model (LLM). The LLM is prompted to generate a comprehensive, human-readable answer based only on the provided context.
 Response: The final, synthesized answer is presented to the user, with optional citations to the source documents.
+
+
+ Zero-Shot Prompting with Groq API (LLaMA3)
+
+This project demonstrates how to send a zero-shot prompt to the Groq API using the LLaMA 3 model and get a response backall via a simple Node.js script.
+
+
+ What This Project Does
+
+ Loads your Groq API key from a `.env` file securely using `dotenv`
+Sends a prompt (like a question or task) to Groq's LLaMA 3 model
+ Prints out the AI response in the terminal
+ Uses zero-shot prompting, meaning we ask the model to do something without giving it examples
+
+ Technologies Used
+
+ Node.js
+ Axios (for API requests)
+ Dotenv (for environment variable management)
+ Groq API (https://console.groq.com/)
