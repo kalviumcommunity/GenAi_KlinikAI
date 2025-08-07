@@ -1,0 +1,26 @@
+{
+  "name": "gen_ai",
+  "version": "1.0.0",
+  "description": "KlinikAI is an advanced, AI-powered platform designed to revolutionize how healthcare professionals access and interpret patient medical histories. It transforms scattered, unstructured medical records into a centralized, intelligent knowledge base, allowing for rapid, conversational access to a patient's complete clinical past.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalviumcommunity/GenAi_KlinikAI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kalviumcommunity/GenAi_KlinikAI/issues"
+  },
+  "homepage": "https://github.com/kalviumcommunity/GenAi_KlinikAI#readme",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "dotenv": "^17.2.1",
+    "node-fetch": "^3.3.2"
+  }
+}
