@@ -27,7 +27,7 @@ const data = {
 axios.post('https://api.groq.com/openai/v1/chat/completions', data, { headers })
   .then((response) => {
     const answer = response.data.choices[0].message.content;
-    console.log('✅ Groq Response:', answer);
+    console.log(' Groq Response:', answer);
   })
   .catch((error) => {
     if (error.response) {
