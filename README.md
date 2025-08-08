@@ -3,13 +3,13 @@ KlinikAI is an advanced, AI-powered platform designed to revolutionize how healt
 
 
 
-🌟 Overview
+ Overview
 In a fast-paced clinical environment, sifting through numerous files—lab results, consultation notes, and discharge summaries—is time-consuming and risks overlooking critical information. KlinikAI addresses this challenge by providing a smart assistant that can synthesize information from all patient records and answer complex questions in plain language.
 This project uses a Retrieval-Augmented Generation (RAG) architecture to provide accurate, context-aware answers, ensuring that all generated information is grounded in the source documents
 
 
 
-✨ Key Features
+ Key Features
 Unified Patient History: Consolidates various document formats (PDF, TXT, DOCX) into a single, queryable knowledge base.
 Natural Language Querying: Ask specific questions like "Summarize all cardiac-related events" or "List all medications prescribed in the last year" and get direct answers.
 Intelligent Summarization: Delivers on-demand, coherent summaries of a patient's entire medical history.
@@ -45,3 +45,59 @@ Sends a prompt (like a question or task) to Groq's LLaMA 3 model
  Axios (for API requests)
  Dotenv (for environment variable management)
  Groq API (https://console.groq.com/)
+
+
+ Multi-Shot Prompting with Groq API
+This project demonstrates multi-shot prompting using the Groq API with the llama3-8b-8192 model.
+Multi-shot prompting helps guide the AI by providing multiple examples of the desired input-output pattern before asking it to generate a new response.
+
+ What is Multi-Shot Prompting?
+Multi-shot prompting is when you give the AI two or more examples of what you want before asking your real question.
+It’s like showing the AI "Here’s how I want my answers to look" before it starts.
+
+Benefits:
+
+Correctness: AI follows the given format more accurately.
+
+Efficiency: Less need to correct or re-run prompts.
+
+Scalability: Easily adapted to larger datasets or more examples.
+ Project Structure
+bash
+Copy
+Edit
+
+├── script.js            # Main script that sends prompts to the Groq API
+├── multiShotPrompt.js   # Contains the multi-shot prompt examples
+├── .env                 # Stores your Groq API key (not shared publicly)
+└── README.md
+ Multi-Shot Prompt Example
+text
+Copy
+Edit
+You are a movie recommendation assistant. Given a user’s mood and preferred genre, suggest 3 movies with short descriptions.
+
+Example 1:
+User Mood: Happy
+Preferred Genre: Comedy
+Output:
+The Intern – Lighthearted workplace comedy with warm moments.
+Crazy Rich Asians – Fun, vibrant rom-com with cultural twists.
+ Paddington – Wholesome humor with lovable characters.
+
+Example 2:
+User Mood: Thoughtful
+Preferred Genre: Sci-Fi
+Output:
+Arrival – Deep, emotional story about language and time.
+ Interstellar – Space exploration with emotional stakes.
+ Her – AI romance with introspective themes.
+
+Now your turn:
+User Mood: Adventurous
+Preferred Genre: Action
+In this prompt:
+
+The first two examples teach the AI the desired style and structure.
+
+The final case is left incomplete, so the AI continues the pattern.
