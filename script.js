@@ -1,5 +1,6 @@
 // Global variables
 let currentApiKey = '';
+let currentTemperature = 0.7; // Default temperature
 
 // DOM elements
 const apiKeyInput = document.getElementById('apiKey');
@@ -13,6 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedApiKey) {
         apiKeyInput.value = savedApiKey;
         currentApiKey = savedApiKey;
+    }
+    
+    // Load saved temperature from localStorage
+    const savedTemperature = localStorage.getItem('groqTemperature');
+    if (savedTemperature) {
+        currentTemperature = parseFloat(savedTemperature);
+        updateTemperatureDisplay();
     }
     
     // Save API key when changed
@@ -54,6 +62,52 @@ Please provide assessment and recommendations following the same format as the e
     multiShotPromptInput.value = klinikAIPrompt;
 }
 
+// Temperature control functions
+function updateTemperature(newTemperature) {
+    currentTemperature = newTemperature;
+    localStorage.setItem('groqTemperature', currentTemperature.toString());
+    updateTemperatureDisplay();
+    
+    // Show temperature effect explanation
+    showTemperatureEffect(newTemperature);
+}
+
+function updateTemperatureDisplay() {
+    const tempSlider = document.getElementById('temperatureSlider');
+    const tempValue = document.getElementById('temperatureValue');
+    const tempDescription = document.getElementById('temperatureDescription');
+    
+    if (tempSlider) tempSlider.value = currentTemperature;
+    if (tempValue) tempValue.textContent = currentTemperature;
+    if (tempDescription) tempDescription.textContent = getTemperatureDescription(currentTemperature);
+}
+
+function getTemperatureDescription(temperature) {
+    if (temperature <= 0.1) return "Very Conservative - Highly focused and consistent responses";
+    if (temperature <= 0.3) return "Conservative - Focused and predictable responses";
+    if (temperature <= 0.5) return "Balanced - Good balance of creativity and consistency";
+    if (temperature <= 0.7) return "Creative - More varied and imaginative responses";
+    if (temperature <= 0.9) return "Very Creative - Highly varied and innovative responses";
+    return "Maximum Creativity - Maximum randomness and creativity";
+}
+
+function showTemperatureEffect(temperature) {
+    const effectDiv = document.getElementById('temperatureEffect');
+    if (!effectDiv) return;
+    
+    effectDiv.style.display = 'block';
+    effectDiv.innerHTML = `
+        <h4>🎯 Temperature Effect: ${temperature}</h4>
+        <p><strong>${getTemperatureDescription(temperature)}</strong></p>
+        <p>This setting will affect how creative vs. consistent the AI responses are.</p>
+    `;
+    
+    // Hide after 5 seconds
+    setTimeout(() => {
+        effectDiv.style.display = 'none';
+    }, 5000);
+}
+
 // Zero-shot prompting function - using KlinikAI relevant prompt
 async function sendZeroShotPrompt() {
     if (!validateApiKey()) return;
@@ -68,7 +122,7 @@ async function sendZeroShotPrompt() {
     hideResponse('zeroShotResponse');
     
     try {
-        const response = await sendPromptToGroq(prompt);
+        const response = await sendPromptToGroq(prompt, currentTemperature);
         showResponse('zeroShotResponse', 'zeroShotContent', response);
     } catch (error) {
         showError('zeroShotResponse', `Error: ${error.message}`);
@@ -91,7 +145,7 @@ async function sendMultiShotPrompt() {
     hideResponse('multiShotResponse');
     
     try {
-        const response = await sendPromptToGroq(prompt);
+        const response = await sendPromptToGroq(prompt, currentTemperature);
         showResponse('multiShotResponse', 'multiShotContent', response);
     } catch (error) {
         showError('multiShotResponse', `Error: ${error.message}`);
@@ -100,8 +154,8 @@ async function sendMultiShotPrompt() {
     }
 }
 
-// Send prompt to Groq API - same as your original implementation
-async function sendPromptToGroq(content) {
+// Send prompt to Groq API - now with temperature control
+async function sendPromptToGroq(content, temperature = 0.7) {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -111,7 +165,7 @@ async function sendPromptToGroq(content) {
         body: JSON.stringify({
             model: 'llama3-8b-8192',
             messages: [{ role: 'user', content }],
-            temperature: 0.7,
+            temperature: temperature,
             max_tokens: 1000,
         }),
     });
@@ -125,6 +179,52 @@ async function sendPromptToGroq(content) {
     return data.choices[0].message.content;
 }
 
+// Test different temperatures with the same prompt
+async function testTemperatureEffects() {
+    if (!validateApiKey()) return;
+    
+    const prompt = "Explain the symptoms of diabetes in a creative way";
+    const temperatures = [0.1, 0.3, 0.7, 1.0];
+    const results = [];
+    
+    showLoading('temperatureTestLoading', true);
+    
+    try {
+        for (let temp of temperatures) {
+            const response = await sendPromptToGroq(prompt, temp);
+            results.push({ temperature: temp, response: response });
+        }
+        
+        // Display results
+        showTemperatureTestResults(results);
+    } catch (error) {
+        showError('temperatureTestResponse', `Error: ${error.message}`);
+    } finally {
+        showLoading('temperatureTestLoading', false);
+    }
+}
+
+function showTemperatureTestResults(results) {
+    const responseDiv = document.getElementById('temperatureTestResponse');
+    if (!responseDiv) return;
+    
+    let content = '<h3>🌡️ Temperature Effect Comparison:</h3>';
+    
+    results.forEach(result => {
+        content += `
+            <div style="margin: 20px 0; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px;">
+                <h4>Temperature: ${result.temperature} - ${getTemperatureDescription(result.temperature)}</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    ${result.response}
+                </div>
+            </div>
+        `;
+    });
+    
+    responseDiv.innerHTML = content;
+    responseDiv.style.display = 'block';
+}
+
 // Validation functions
 function validateApiKey() {
     if (!currentApiKey.trim()) {
@@ -132,7 +232,7 @@ function validateApiKey() {
         apiKeyInput.focus();
         return false;
     }
-    return false;
+    return true;
 }
 
 // UI helper functions
