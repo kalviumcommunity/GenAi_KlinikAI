@@ -1,6 +1,12 @@
 // Global variables
 let currentApiKey = '';
 let currentTemperature = 0.7; // Default temperature
+let tokenUsage = {
+    totalInputTokens: 0,
+    totalOutputTokens: 0,
+    totalTokens: 0,
+    callCount: 0
+};
 
 // DOM elements
 const apiKeyInput = document.getElementById('apiKey');
@@ -21,6 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedTemperature) {
         currentTemperature = parseFloat(savedTemperature);
         updateTemperatureDisplay();
+    }
+    
+    // Load saved token usage from localStorage
+    const savedTokenUsage = localStorage.getItem('groqTokenUsage');
+    if (savedTokenUsage) {
+        tokenUsage = { ...tokenUsage, ...JSON.parse(savedTokenUsage) };
+        updateTokenDisplay();
     }
     
     // Save API key when changed
@@ -60,6 +73,96 @@ Medical History: Migraine history, no other conditions
 Please provide assessment and recommendations following the same format as the examples above.`;
     
     multiShotPromptInput.value = klinikAIPrompt;
+}
+
+// Token management functions
+function updateTokenUsage(inputTokens, outputTokens) {
+    tokenUsage.totalInputTokens += inputTokens;
+    tokenUsage.totalOutputTokens += outputTokens;
+    tokenUsage.totalTokens += (inputTokens + outputTokens);
+    tokenUsage.callCount += 1;
+    
+    // Save to localStorage
+    localStorage.setItem('groqTokenUsage', JSON.stringify(tokenUsage));
+    
+    // Update display
+    updateTokenDisplay();
+    
+    // Log to console
+    logTokenUsage(inputTokens, outputTokens);
+}
+
+function updateTokenDisplay() {
+    const tokenDisplay = document.getElementById('tokenDisplay');
+    if (!tokenDisplay) return;
+    
+    tokenDisplay.innerHTML = `
+        <h4>📊 Token Usage Statistics</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e9ecef;">
+                <div style="font-size: 1.5rem; font-weight: bold; color: #2196f3;">${tokenUsage.callCount}</div>
+                <div style="color: #666; font-size: 0.9rem;">Total Calls</div>
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e9ecef;">
+                <div style="font-size: 1.5rem; font-weight: bold; color: #4caf50;">${tokenUsage.totalInputTokens}</div>
+                <div style="color: #666; font-size: 0.9rem;">Input Tokens</div>
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e9ecef;">
+                <div style="font-size: 1.5rem; font-weight: bold; color: #ff9800;">${tokenUsage.totalOutputTokens}</div>
+                <div style="color: #666; font-size: 0.9rem;">Output Tokens</div>
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e9ecef;">
+                <div style="font-size: 1.5rem; font-weight: bold; color: #9c27b0;">${tokenUsage.totalTokens}</div>
+                <div style="color: #666; font-size: 0.9rem;">Total Tokens</div>
+            </div>
+        </div>
+        <div style="margin-top: 15px; text-align: center;">
+            <button class="btn btn-warning" onclick="resetTokenUsage()" style="font-size: 14px; padding: 10px 20px;">
+                🔄 Reset Token Count
+            </button>
+        </div>
+    `;
+}
+
+function logTokenUsage(inputTokens, outputTokens) {
+    const totalTokens = inputTokens + outputTokens;
+    const estimatedCost = calculateEstimatedCost(totalTokens);
+    
+    console.log('='.repeat(60));
+    console.log('🔍 TOKEN USAGE LOG');
+    console.log('='.repeat(60));
+    console.log(`📥 Input Tokens: ${inputTokens}`);
+    console.log(`📤 Output Tokens: ${outputTokens}`);
+    console.log(`📊 Total Tokens: ${totalTokens}`);
+    console.log(`💰 Estimated Cost: $${estimatedCost.toFixed(6)}`);
+    console.log('='.repeat(60));
+    console.log(`📈 Cumulative Statistics:`);
+    console.log(`   Total Calls: ${tokenUsage.callCount}`);
+    console.log(`   Total Input Tokens: ${tokenUsage.totalInputTokens}`);
+    console.log(`   Total Output Tokens: ${tokenUsage.totalOutputTokens}`);
+    console.log(`   Grand Total Tokens: ${tokenUsage.totalTokens}`);
+    console.log(`   Total Estimated Cost: $${calculateEstimatedCost(tokenUsage.totalTokens).toFixed(6)}`);
+    console.log('='.repeat(60));
+}
+
+function calculateEstimatedCost(tokens) {
+    // Groq pricing (approximate): $0.05 per 1M tokens
+    // This is a rough estimate - actual pricing may vary
+    return (tokens / 1000000) * 0.05;
+}
+
+function resetTokenUsage() {
+    if (confirm('Are you sure you want to reset all token usage statistics?')) {
+        tokenUsage = {
+            totalInputTokens: 0,
+            totalOutputTokens: 0,
+            totalTokens: 0,
+            callCount: 0
+        };
+        localStorage.removeItem('groqTokenUsage');
+        updateTokenDisplay();
+        console.log('🔄 Token usage statistics have been reset.');
+    }
 }
 
 // Temperature control functions
@@ -154,7 +257,7 @@ async function sendMultiShotPrompt() {
     }
 }
 
-// Send prompt to Groq API - now with temperature control
+// Send prompt to Groq API - now with temperature control and token logging
 async function sendPromptToGroq(content, temperature = 0.7) {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -176,6 +279,14 @@ async function sendPromptToGroq(content, temperature = 0.7) {
     }
     
     const data = await response.json();
+    
+    // Extract token usage information
+    const inputTokens = data.usage?.prompt_tokens || 0;
+    const outputTokens = data.usage?.completion_tokens || 0;
+    
+    // Update token usage statistics
+    updateTokenUsage(inputTokens, outputTokens);
+    
     return data.choices[0].message.content;
 }
 

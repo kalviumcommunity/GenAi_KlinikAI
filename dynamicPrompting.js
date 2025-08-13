@@ -1,10 +1,9 @@
-// Dynamic Prompting System for KlinikAI
-// This system demonstrates dynamic prompting by adapting prompts based on user input, context, and real-time data
+
 
 class DynamicPromptingSystem {
     constructor() {
         this.promptTemplates = {
-            // Base templates for different medical scenarios
+        
             symptomAnalysis: {
                 basic: "Analyze the following symptoms: {symptoms}",
                 detailed: "Provide a detailed analysis of symptoms: {symptoms}. Consider patient history: {history}",
@@ -46,27 +45,27 @@ class DynamicPromptingSystem {
         };
     }
 
-    // Dynamic prompt generation based on context
+
     generateDynamicPrompt(promptType, userInput, context = {}) {
         let baseTemplate = this.promptTemplates[promptType]?.basic || "Analyze: {input}";
         
-        // Merge context with user input
+
         const fullContext = { ...this.contextVariables, ...context, input: userInput };
         
-        // Apply dynamic rules to modify prompt
+    
         const modifiedPrompt = this.applyDynamicRules(baseTemplate, fullContext);
         
-        // Fill template variables
+        
         const finalPrompt = this.fillTemplate(modifiedPrompt, fullContext);
         
         return finalPrompt;
     }
 
-    // Apply dynamic rules based on context
+   
     applyDynamicRules(template, context) {
         let modifiedTemplate = template;
         
-        // Age-based modifications
+       
         if (context.patientAge) {
             const age = parseInt(context.patientAge);
             if (age < 18) {
@@ -76,7 +75,7 @@ class DynamicPromptingSystem {
             }
         }
         
-        // Severity-based modifications
+        
         if (context.symptoms) {
             const symptomCount = context.symptoms.split(',').length;
             if (symptomCount >= 6) {
