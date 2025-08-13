@@ -1,103 +1,145 @@
-KlinikAI is an advanced, AI-powered platform designed to revolutionize how healthcare professionals access and interpret patient medical histories. It transforms scattered, unstructured medical records into a centralized, intelligent knowledge base, allowing for rapid, conversational access to a patient's complete clinical past.
+# GenAI Prompting Interface
 
+A modern web application that demonstrates **Zero-Shot** and **Multi-Shot** AI prompting techniques using the Groq API.
 
+## 🚀 Features
 
+- **Zero-Shot Prompting**: Send direct prompts to AI without examples
+- **Multi-Shot Prompting**: Provide examples to guide AI responses
+- **Beautiful UI**: Modern, responsive design with smooth animations
+- **API Key Management**: Secure storage of your Groq API key
+- **Example Prompts**: Pre-built examples for quick testing
+- **Real-time Responses**: See AI responses instantly in the browser
 
- Overview
-In a fast-paced clinical environment, sifting through numerous files—lab results, consultation notes, and discharge summaries—is time-consuming and risks overlooking critical information. KlinikAI addresses this challenge by providing a smart assistant that can synthesize information from all patient records and answer complex questions in plain language.
-This project uses a Retrieval-Augmented Generation (RAG) architecture to provide accurate, context-aware answers, ensuring that all generated information is grounded in the source documents
+## 🛠️ Setup
 
+### 1. Get a Groq API Key
 
+1. Visit [Groq Console](https://console.groq.com/)
+2. Sign up or log in to your account
+3. Navigate to API Keys section
+4. Create a new API key
+5. Copy the key (it starts with `gsk_`)
 
- Key Features
-Unified Patient History: Consolidates various document formats (PDF, TXT, DOCX) into a single, queryable knowledge base.
-Natural Language Querying: Ask specific questions like "Summarize all cardiac-related events" or "List all medications prescribed in the last year" and get direct answers.
-Intelligent Summarization: Delivers on-demand, coherent summaries of a patient's entire medical history.
-Source Verification: Cites the source documents for its generated answers, allowing for easy verification of information.
-Reduced Administrative Burden: Frees up valuable time for healthcare providers, allowing them to focus on patient care instead of paperwork.
-Improved Clinical Decision-Making: Provides a holistic patient view to help identify patterns and make more informed decisions.
+### 2. Run the Application
 
+1. **Option A: Simple HTTP Server**
+   ```bash
+   # Using Python 3
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx http-server
+   
+   # Using PHP
+   php -S localhost:8000
+   ```
 
+2. **Option B: Live Server Extension (VS Code)**
+   - Install the "Live Server" extension
+   - Right-click on `index.html` and select "Open with Live Server"
 
-How It Works: The RAG Architecture
-KlinikAI operates on a robust Retrieval-Augmented Generation pipeline:
-Indexing: All patient medical records are loaded, split into manageable chunks, and converted into numerical representations (vector embeddings). These are stored in a specialized vector database.
-Retrieval: When a user asks a question, the query is also converted into a vector. The system then performs a similarity search in the vector database to find the most relevant chunks of text from the source documents.
-Generation: The user's original query and the retrieved text chunks are passed to a Large Language Model (LLM). The LLM is prompted to generate a comprehensive, human-readable answer based only on the provided context.
-Response: The final, synthesized answer is presented to the user, with optional citations to the source documents.
+3. **Option C: Direct File Opening**
+   - Simply double-click `index.html` to open in your browser
+   - Note: Some browsers may block API calls when opening files directly
 
+### 3. Configure API Key
 
- Zero-Shot Prompting with Groq API (LLaMA3)
+1. Open the application in your browser
+2. Enter your Groq API key in the "API Configuration" section
+3. The key will be saved locally for future use
 
-This project demonstrates how to send a zero-shot prompt to the Groq API using the LLaMA 3 model and get a response backall via a simple Node.js script.
+## 📖 How to Use
 
+### Zero-Shot Prompting
 
- What This Project Does
+1. Enter your prompt in the "Zero-Shot Prompting" section
+2. Click "Send Zero-Shot Prompt"
+3. View the AI's response
 
- Loads your Groq API key from a `.env` file securely using `dotenv`
-Sends a prompt (like a question or task) to Groq's LLaMA 3 model
- Prints out the AI response in the terminal
- Uses zero-shot prompting, meaning we ask the model to do something without giving it examples
+**Example prompts:**
+- "Can you give me a chocolate cake recipe?"
+- "Explain quantum computing in simple terms"
+- "Write a short poem about autumn"
 
- Technologies Used
+### Multi-Shot Prompting
 
- Node.js
- Axios (for API requests)
- Dotenv (for environment variable management)
- Groq API (https://console.groq.com/)
+1. Customize the multi-shot prompt with your own examples
+2. Click "Send Multi-Shot Prompt"
+3. See how the AI follows the pattern you've established
 
+**Built-in examples include:**
+- Movie recommendations based on mood and genre
+- Creative writing assistance
+- Recipe generation
 
- Multi-Shot Prompting with Groq API
-This project demonstrates multi-shot prompting using the Groq API with the llama3-8b-8192 model.
-Multi-shot prompting helps guide the AI by providing multiple examples of the desired input-output pattern before asking it to generate a new response.
+## 🔧 Technical Details
 
- What is Multi-Shot Prompting?
-Multi-shot prompting is when you give the AI two or more examples of what you want before asking your real question.
-It’s like showing the AI "Here’s how I want my answers to look" before it starts.
+- **Frontend**: Pure HTML, CSS, and JavaScript
+- **API**: Groq API (llama3-8b-8192 model)
+- **Storage**: Local browser storage for API key
+- **Responsive**: Works on desktop and mobile devices
 
-Benefits:
+## 📱 Browser Compatibility
 
-Correctness: AI follows the given format more accurately.
+- Chrome 80+
+- Firefox 75+
+- Safari 13+
+- Edge 80+
 
-Efficiency: Less need to correct or re-run prompts.
+## 🚨 Troubleshooting
 
-Scalability: Easily adapted to larger datasets or more examples.
- Project Structure
-bash
-Copy
-Edit
+### Common Issues
 
-├── script.js            # Main script that sends prompts to the Groq API
-├── multiShotPrompt.js   # Contains the multi-shot prompt examples
-├── .env                 # Stores your Groq API key (not shared publicly)
-└── README.md
- Multi-Shot Prompt Example
-text
-Copy
-Edit
-You are a movie recommendation assistant. Given a user’s mood and preferred genre, suggest 3 movies with short descriptions.
+1. **"Please enter your Groq API key first"**
+   - Make sure you've entered your API key in the configuration section
 
-Example 1:
-User Mood: Happy
-Preferred Genre: Comedy
-Output:
-The Intern – Lighthearted workplace comedy with warm moments.
-Crazy Rich Asians – Fun, vibrant rom-com with cultural twists.
- Paddington – Wholesome humor with lovable characters.
+2. **"Error: HTTP 401"**
+   - Your API key is invalid or expired
+   - Generate a new key from the Groq console
 
-Example 2:
-User Mood: Thoughtful
-Preferred Genre: Sci-Fi
-Output:
-Arrival – Deep, emotional story about language and time.
- Interstellar – Space exploration with emotional stakes.
- Her – AI romance with introspective themes.
+3. **"Error: HTTP 429"**
+   - You've exceeded your API rate limits
+   - Wait a moment before trying again
 
-Now your turn:
-User Mood: Adventurous
-Preferred Genre: Action
-In this prompt:
+4. **CORS Errors**
+   - Use a local HTTP server instead of opening the file directly
+   - The Groq API supports CORS for web applications
 
-The first two examples teach the AI the desired style and structure.
+### API Limits
 
-The final case is left incomplete, so the AI continues the pattern.
+- **Free Tier**: 100 requests per minute
+- **Paid Plans**: Higher limits based on your subscription
+
+## 🎯 Use Cases
+
+- **Content Creation**: Generate articles, stories, and creative content
+- **Learning**: Get explanations and examples for complex topics
+- **Problem Solving**: Receive step-by-step solutions
+- **Creative Writing**: Develop characters, plots, and dialogue
+- **Business**: Draft emails, proposals, and marketing copy
+
+## 🔒 Security Notes
+
+- Your API key is stored locally in your browser
+- Never share your API key publicly
+- The application runs entirely in your browser
+- No data is sent to external servers except Groq's API
+
+## 📚 Learning Resources
+
+- [Groq API Documentation](https://console.groq.com/docs)
+- [Prompt Engineering Guide](https://www.promptingguide.ai/)
+- [Zero-Shot vs Few-Shot Learning](https://en.wikipedia.org/wiki/Few-shot_learning)
+
+## 🤝 Contributing
+
+Feel free to submit issues, feature requests, or pull requests to improve this application!
+
+## 📄 License
+
+This project is open source and available under the [ISC License](LICENSE).
+
+---
+
+**Happy Prompting! 🎉**
