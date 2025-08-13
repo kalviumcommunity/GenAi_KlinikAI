@@ -1,26 +1,35 @@
 {
-  "name": "gen_ai",
+  "name": "genai-prompting-interface",
   "version": "1.0.0",
-  "description": "KlinikAI is an advanced, AI-powered platform designed to revolutionize how healthcare professionals access and interpret patient medical histories. It transforms scattered, unstructured medical records into a centralized, intelligent knowledge base, allowing for rapid, conversational access to a patient's complete clinical past.",
-  "main": "script.js",
+  "description": "A modern web application that demonstrates Zero-Shot and Multi-Shot AI prompting techniques using the Groq API",
+  "main": "index.html",
   "scripts": {
+    "start": "python -m http.server 8000",
+    "start:node": "npx http-server",
+    "start:php": "php -S localhost:8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kalviumcommunity/GenAi_KlinikAI.git"
   },
-  "keywords": [],
+  "keywords": [
+    "ai",
+    "prompting",
+    "groq",
+    "llama",
+    "zero-shot",
+    "multi-shot",
+    "web-app",
+    "javascript"
+  ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/kalviumcommunity/GenAi_KlinikAI/issues"
   },
   "homepage": "https://github.com/kalviumcommunity/GenAi_KlinikAI#readme",
-  "dependencies": {
-    "axios": "^1.11.0",
-    "dotenv": "^17.2.1",
-    "node-fetch": "^3.3.2"
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }

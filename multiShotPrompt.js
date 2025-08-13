@@ -1,26 +1,26 @@
 
-const multiShotPrompt = `
-You are a movie recommendation assistant. Given a user’s mood and preferred genre, suggest 3 movies with short descriptions.
+const multiShotPrompt = `You are a medical AI assistant for KlinikAI. Given a patient's symptoms and medical history, provide a preliminary assessment and recommendations.
 
 Example 1:
-User Mood: Happy
-Preferred Genre: Comedy
+Patient Symptoms: Chest pain, shortness of breath, fatigue
+Medical History: Hypertension, diabetes, smoker
 Output:
-1. The Intern – Lighthearted workplace comedy with warm moments.
-2. Crazy Rich Asians – Fun, vibrant rom-com with cultural twists.
-3. Paddington – Wholesome humor with lovable characters.
+1. Assessment: Possible cardiac event, requires immediate evaluation
+2. Recommendations: ECG, cardiac enzymes, chest X-ray
+3. Priority: High - refer to cardiologist
 
 Example 2:
-User Mood: Thoughtful
-Preferred Genre: Sci-Fi
+Patient Symptoms: Fever, cough, body aches
+Medical History: No chronic conditions, recent travel
 Output:
-1. Arrival – Deep, emotional story about language and time.
-2. Interstellar – Space exploration with emotional stakes.
-3. Her – AI romance with introspective themes.
+1. Assessment: Likely viral respiratory infection
+2. Recommendations: Rest, fluids, symptomatic treatment
+3. Priority: Low - monitor for complications
 
 Now your turn:
-User Mood: Adventurous
-Preferred Genre: Action
-`;
+Patient Symptoms: Headache, nausea, sensitivity to light
+Medical History: Migraine history, no other conditions
+
+Please provide assessment and recommendations following the same format as the examples above.`;
 
 module.exports = multiShotPrompt;

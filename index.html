@@ -3,11 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>KlinikAI - Medical AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .prompt-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        .prompt-section:hover {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+        
+        .prompt-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .prompt-section h2::before {
+            content: "🏥";
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .response {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        
+        .response.show {
+            display: block;
+        }
+        
+        .response h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .response-content {
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #fee;
+            border-left-color: #e74c3c;
+            color: #c0392b;
+        }
+        
+        .api-key-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .api-key-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .api-key-section input {
+            background: white;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .prompt-section {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Zero Shot Prompting</h1>
-   
+    <div class="container">
+        <div class="header">
+            <h1>KlinikAI - Medical AI Assistant</h1>
+            <p>Advanced AI-powered platform for healthcare professionals</p>
+        </div>
+        
+        <div class="content">
+            <div class="api-key-section">
+                <h3>🔑 API Configuration</h3>
+                <div class="form-group">
+                    <label for="apiKey">Groq API Key:</label>
+                    <input type="text" id="apiKey" placeholder="Enter your Groq API key here..." />
+                </div>
+            </div>
+            
+            <div class="prompt-section">
+                <h2>Zero-Shot Medical Analysis</h2>
+                <p style="margin-bottom: 20px; color: #666;">
+                    Zero-shot prompting allows the AI to analyze medical queries without specific examples.
+                </p>
+                <div class="form-group">
+                    <label for="zeroShotPrompt">Enter your medical query:</label>
+                    <input type="text" id="zeroShotPrompt" placeholder="e.g., What are the common symptoms of diabetes?" value="What are the common symptoms of diabetes?" />
+                </div>
+                <button class="btn" onclick="sendZeroShotPrompt()">
+                    🚀 Analyze Medical Query
+                </button>
+                <div class="loading" id="zeroShotLoading">
+                    <div class="spinner"></div>
+                    <p>Analyzing your medical query...</p>
+                </div>
+                <div class="response" id="zeroShotResponse">
+                    <h3>AI Medical Analysis:</h3>
+                    <div class="response-content" id="zeroShotContent"></div>
+                </div>
+            </div>
+            
+            <div class="prompt-section">
+                <h2>Multi-Shot Medical Assessment</h2>
+                <p style="margin-bottom: 20px; color: #666;">
+                    Multi-shot prompting provides examples to guide AI medical assessments and recommendations.
+                </p>
+                <div class="form-group">
+                    <label for="multiShotPrompt">Customize the medical assessment prompt:</label>
+                    <textarea id="multiShotPrompt" placeholder="Enter your multi-shot medical prompt with examples...">You are a medical AI assistant for KlinikAI. Given a patient's symptoms and medical history, provide a preliminary assessment and recommendations.
+
+Example 1:
+Patient Symptoms: Chest pain, shortness of breath, fatigue
+Medical History: Hypertension, diabetes, smoker
+Output:
+1. Assessment: Possible cardiac event, requires immediate evaluation
+2. Recommendations: ECG, cardiac enzymes, chest X-ray
+3. Priority: High - refer to cardiologist
+
+Example 2:
+Patient Symptoms: Fever, cough, body aches
+Medical History: No chronic conditions, recent travel
+Output:
+1. Assessment: Likely viral respiratory infection
+2. Recommendations: Rest, fluids, symptomatic treatment
+3. Priority: Low - monitor for complications
+
+Now your turn:
+Patient Symptoms: Headache, nausea, sensitivity to light
+Medical History: Migraine history, no other conditions
+
+Please provide assessment and recommendations following the same format as the examples above.</textarea>
+                </div>
+                <button class="btn" onclick="sendMultiShotPrompt()">
+                    🎯 Get Medical Assessment
+                </button>
+                <div class="loading" id="multiShotLoading">
+                    <div class="spinner"></div>
+                    <p>Generating medical assessment...</p>
+                </div>
+                <div class="response" id="multiShotResponse">
+                    <h3>AI Medical Assessment:</h3>
+                    <div class="response-content" id="multiShotContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
