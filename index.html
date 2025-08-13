@@ -211,8 +211,6 @@
             border-top: 3px solid #667eea;
             border-radius: 50%;
             width: 30px;
-            border-radius: 50%;
-            width: 30px;
             height: 30px;
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
@@ -316,6 +314,47 @@
             margin-top: 15px;
         }
         
+        .token-section {
+            background: #f0f8ff;
+            border: 1px solid #87ceeb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .token-section h3 {
+            color: #4682b4;
+            margin-bottom: 15px;
+        }
+        
+        .token-info {
+            background: #e6f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .token-info h4 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        .token-info p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .token-info ul {
+            color: #555;
+            margin-left: 20px;
+        }
+        
+        .token-info li {
+            margin-bottom: 5px;
+        }
+        
         .temperature-test-section {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
@@ -382,6 +421,24 @@
                 </div>
                 <p id="temperatureDescription" class="temperature-description">Creative - More varied and imaginative responses</p>
                 <div id="temperatureEffect" class="temperature-effect"></div>
+            </div>
+            
+            <div class="token-section">
+                <h3>🔢 Token Usage & Management</h3>
+                <div class="token-info">
+                    <h4>What are Tokens?</h4>
+                    <p><strong>Tokens</strong> are the basic units of text that AI models process. They can be:</p>
+                    <ul>
+                        <li><strong>Words</strong> (e.g., "diabetes" = 1 token)</li>
+                        <li><strong>Parts of words</strong> (e.g., "un" + "happy" = 2 tokens)</li>
+                        <li><strong>Punctuation</strong> (e.g., "," = 1 token)</li>
+                        <li><strong>Special characters</strong> (e.g., "🏥" = 1 token)</li>
+                    </ul>
+                    <p><strong>Why it matters:</strong> Token count affects API costs, response length limits, and processing time.</p>
+                </div>
+                <div id="tokenDisplay">
+                    <!-- Token statistics will be displayed here -->
+                </div>
             </div>
             
             <div class="prompt-section">
