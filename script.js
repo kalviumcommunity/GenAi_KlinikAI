@@ -1,6 +1,5 @@
-// Global variables
 let currentApiKey = '';
-let currentTemperature = 0.7; // Default temperature
+let currentTemperature = 0.7;
 let tokenUsage = {
     totalInputTokens: 0,
     totalOutputTokens: 0,
@@ -8,45 +7,37 @@ let tokenUsage = {
     callCount: 0
 };
 
-// DOM elements
 const apiKeyInput = document.getElementById('apiKey');
 const zeroShotPromptInput = document.getElementById('zeroShotPrompt');
 const multiShotPromptInput = document.getElementById('multiShotPrompt');
 
-// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Load API key from localStorage if available
     const savedApiKey = localStorage.getItem('groqApiKey');
     if (savedApiKey) {
         apiKeyInput.value = savedApiKey;
         currentApiKey = savedApiKey;
     }
     
-    // Load saved temperature from localStorage
     const savedTemperature = localStorage.getItem('groqTemperature');
     if (savedTemperature) {
         currentTemperature = parseFloat(savedTemperature);
         updateTemperatureDisplay();
     }
     
-    // Load saved token usage from localStorage
     const savedTokenUsage = localStorage.getItem('groqTokenUsage');
     if (savedTokenUsage) {
         tokenUsage = { ...tokenUsage, ...JSON.parse(savedTokenUsage) };
         updateTokenDisplay();
     }
     
-    // Save API key when changed
     apiKeyInput.addEventListener('input', function() {
         currentApiKey = this.value;
         localStorage.setItem('groqApiKey', currentApiKey);
     });
     
-    // Load the original KlinikAI multi-shot prompt
     loadKlinikAIMultiShotPrompt();
 });
 
-// Load the KlinikAI multi-shot prompt for medical record analysis
 function loadKlinikAIMultiShotPrompt() {
     const klinikAIPrompt = `You are a medical AI assistant for KlinikAI. Given a patient's symptoms and medical history, provide a preliminary assessment and recommendations.
 
@@ -75,20 +66,16 @@ Please provide assessment and recommendations following the same format as the e
     multiShotPromptInput.value = klinikAIPrompt;
 }
 
-// Token management functions
 function updateTokenUsage(inputTokens, outputTokens) {
     tokenUsage.totalInputTokens += inputTokens;
     tokenUsage.totalOutputTokens += outputTokens;
     tokenUsage.totalTokens += (inputTokens + outputTokens);
     tokenUsage.callCount += 1;
     
-    // Save to localStorage
     localStorage.setItem('groqTokenUsage', JSON.stringify(tokenUsage));
     
-    // Update display
     updateTokenDisplay();
     
-    // Log to console
     logTokenUsage(inputTokens, outputTokens);
 }
 
@@ -146,8 +133,6 @@ function logTokenUsage(inputTokens, outputTokens) {
 }
 
 function calculateEstimatedCost(tokens) {
-    // Groq pricing (approximate): $0.05 per 1M tokens
-    // This is a rough estimate - actual pricing may vary
     return (tokens / 1000000) * 0.05;
 }
 
@@ -165,13 +150,11 @@ function resetTokenUsage() {
     }
 }
 
-// Temperature control functions
 function updateTemperature(newTemperature) {
     currentTemperature = newTemperature;
     localStorage.setItem('groqTemperature', currentTemperature.toString());
     updateTemperatureDisplay();
     
-    // Show temperature effect explanation
     showTemperatureEffect(newTemperature);
 }
 
@@ -205,13 +188,11 @@ function showTemperatureEffect(temperature) {
         <p>This setting will affect how creative vs. consistent the AI responses are.</p>
     `;
     
-    // Hide after 5 seconds
     setTimeout(() => {
         effectDiv.style.display = 'none';
     }, 5000);
 }
 
-// Zero-shot prompting function - using KlinikAI relevant prompt
 async function sendZeroShotPrompt() {
     if (!validateApiKey()) return;
     
@@ -234,7 +215,6 @@ async function sendZeroShotPrompt() {
     }
 }
 
-// Multi-shot prompting function - using KlinikAI relevant prompt
 async function sendMultiShotPrompt() {
     if (!validateApiKey()) return;
     
@@ -257,7 +237,6 @@ async function sendMultiShotPrompt() {
     }
 }
 
-// Send prompt to Groq API - now with temperature control and token logging
 async function sendPromptToGroq(content, temperature = 0.7) {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -280,17 +259,14 @@ async function sendPromptToGroq(content, temperature = 0.7) {
     
     const data = await response.json();
     
-    // Extract token usage information
     const inputTokens = data.usage?.prompt_tokens || 0;
     const outputTokens = data.usage?.completion_tokens || 0;
     
-    // Update token usage statistics
     updateTokenUsage(inputTokens, outputTokens);
     
     return data.choices[0].message.content;
 }
 
-// Test different temperatures with the same prompt
 async function testTemperatureEffects() {
     if (!validateApiKey()) return;
     
@@ -306,7 +282,6 @@ async function testTemperatureEffects() {
             results.push({ temperature: temp, response: response });
         }
         
-        // Display results
         showTemperatureTestResults(results);
     } catch (error) {
         showError('temperatureTestResponse', `Error: ${error.message}`);
@@ -336,7 +311,6 @@ function showTemperatureTestResults(results) {
     responseDiv.style.display = 'block';
 }
 
-// Validation functions
 function validateApiKey() {
     if (!currentApiKey.trim()) {
         alert('Please enter your Groq API key first.');
@@ -346,7 +320,6 @@ function validateApiKey() {
     return true;
 }
 
-// UI helper functions
 function showLoading(loadingId, show) {
     const loadingElement = document.getElementById(loadingId);
     if (show) {
