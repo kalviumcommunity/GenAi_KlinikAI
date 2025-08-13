@@ -45,6 +45,33 @@
             opacity: 0.9;
         }
         
+        .navigation {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .nav-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+        
         .content {
             padding: 40px;
         }
@@ -228,6 +255,11 @@
         <div class="header">
             <h1>KlinikAI - Medical AI Assistant</h1>
             <p>Advanced AI-powered platform for healthcare professionals</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="index.html" class="nav-button">🏠 Main Interface</a>
+            <a href="dynamicPromptingDemo.html" class="nav-button">🚀 Dynamic Prompting Demo</a>
         </div>
         
         <div class="content">
